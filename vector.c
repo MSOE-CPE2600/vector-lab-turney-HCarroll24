@@ -122,7 +122,6 @@ int help()
     printf("\tTo find a vector: varname\n\n");
     printf("Reminders: \n");
     printf("\tInclude spaces inbetween values and operands\n");
-    printf("\tOnly a maximum of 10 vectors can be stored\n\n");
     return 0;
 }
 
