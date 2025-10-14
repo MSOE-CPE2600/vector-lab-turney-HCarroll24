@@ -98,12 +98,12 @@ int run_user_interface()
                 continue;
             }
             // else find vector
-            vector v = findvect(tokens[0]);
-            if (v.name[0] == '\0') {
+            vector vect = findvect(tokens[0]);
+            if (vect.name[0] == '\0') {
                 printf("Error: vector '%s' not found\n", tokens[0]);
                 continue;
             }
-            printf("%s = %.2f %.2f %.2f\n", v.name, v.x, v.y, v.z);
+            printf("%s = %.2f %.2f %.2f\n", vect.name, vect.x, vect.y, vect.z);
             continue;
         }
 
