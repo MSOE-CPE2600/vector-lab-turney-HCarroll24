@@ -5,7 +5,7 @@
  * Name: Hunter Carroll
  * Course: CPE2600
  * Section: 012
- * Assignment: Lab 7 
+ * Assignment: Lab7
 *************************************************************************/
 #ifndef FILE_IO_H
 #define FILE_IO_H
