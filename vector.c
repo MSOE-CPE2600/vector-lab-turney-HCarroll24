@@ -10,8 +10,10 @@
 #include "vector.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-vector vector_list[10];
+// Allocates memory for vector list
+vector* vector_list = (vector*)malloc(4 * sizeof(vector));
 
 /**
  * @brief Computes addition of two vectors

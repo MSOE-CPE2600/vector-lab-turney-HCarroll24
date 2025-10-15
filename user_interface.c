@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 
 #define MAX_INPUT 256
 
@@ -107,7 +108,8 @@ int run_user_interface()
                 }
                 filename[strcspn(filename, "\n")] = '\0';
                 vector* list = get_vector_list();
-                save(filename, list, 10);
+                int size = 10;
+                save(filename, list, size);
                 printf("Vector list saved to %s\n", filename);
                 continue;
             }
