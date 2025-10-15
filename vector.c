@@ -94,7 +94,7 @@ vector crossprod(vector a, vector b)
 */
 int addvect(vector new)
 {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
         if (strcmp(vector_list[i].name, new.name) == 0) {
             vector_list[i] = new;
             return 0;
@@ -134,7 +134,7 @@ int help()
 int clear()
 {
     // Iterates through array and sets all values to 0
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
         vector_list[i].name[0] = '\0';
         vector_list[i].x = 0;
         vector_list[i].y = 0;
@@ -151,7 +151,7 @@ int clear()
 int list()
 {
     // Iterates through array and prints all values
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
         printf("%d: ", i + 1);
         if (vector_list[i].name[0] != '\0') {
             printf("%s = %f %f %f", vector_list[i].name, 
@@ -172,7 +172,7 @@ vector findvect(char* name)
     // Iterates through array and returns vector if found
     // Returns empty vector if not found
     vector empty = {"", 0.0, 0.0, 0.0};
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
         if (strcmp(vector_list[i].name, name) == 0) {
             return vector_list[i];
         }
