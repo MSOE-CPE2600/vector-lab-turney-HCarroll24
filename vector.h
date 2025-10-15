@@ -89,4 +89,10 @@ int help();
 */
 int list();
 
+/**
+ * @brief get the vector list to avoid global
+ * @return pointer to vector list
+*/
+vector* get_vector_list();
+
 #endif

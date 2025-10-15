@@ -27,6 +27,7 @@
 #include <string.h>
 #include "user_interface.h"
 #include "vector.h"
+#include "file_io.h"
 
 int main(int argc, char *argv[])
 {

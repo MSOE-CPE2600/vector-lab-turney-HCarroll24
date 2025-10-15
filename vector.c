@@ -177,3 +177,8 @@ vector findvect(char* name)
     }
     return empty;
 }
+
+vector* get_vector_list()
+{
+    return vector_list;
+}
