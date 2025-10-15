@@ -9,6 +9,7 @@
 *************************************************************************/
 #include "user_interface.h"
 #include "vector.h"
+#include "file_io.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,6 +44,7 @@ int run_user_interface()
     int count;
     int vector_found1;
     int vector_found2;
+    char filename[16];
 
     // Display welcome message
     printf("Vector Calculator - Mini Matlab\n");
@@ -95,6 +97,18 @@ int run_user_interface()
             // check if list command
             if (strcmp(tokens[0], "list") == 0) {
                 list();
+                continue;
+            }
+            // check if save command
+            if (strcmp(tokens[0], "save") == 0) {
+                printf("Input name to save to: ");
+                if (fgets(filename, 16, stdin) == NULL) {
+                    continue;
+                }
+                filename[strcspn(filename, "\n")] = '\0';
+                vector* list = get_vector_list();
+                save(filename, list, 10);
+                printf("Vector list saved to %s\n", filename);
                 continue;
             }
             // else find vector

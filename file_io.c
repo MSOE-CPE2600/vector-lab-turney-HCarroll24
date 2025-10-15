@@ -10,6 +10,8 @@
 #include "file_io.h"
 #include "vector.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * @brief Loads vectors from a file

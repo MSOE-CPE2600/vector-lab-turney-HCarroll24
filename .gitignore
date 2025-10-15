@@ -1,6 +1,8 @@
-#dependency files
+# dependency files
 *.d
-#object files
+# object files
 *.o
 # the exe file
 vector
+# csv files
+*.csv

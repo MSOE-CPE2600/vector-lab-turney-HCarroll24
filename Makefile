@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.c user_interface.c vector.c
+SOURCES=main.c user_interface.c vector.c file_io.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=vector
 
