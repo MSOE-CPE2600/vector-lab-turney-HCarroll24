@@ -120,6 +120,7 @@ int addvect(vector new)
 {
     for (int i = 0; i < get_size(); i++) {
         if (strcmp(vector_list[i].name, new.name) == 0) {
+            realloc(vector_list, (get_size() + 1) * sizeof(vector));
             vector_list[i] = new;
             return 0;
         } else if (vector_list[i].name[0] == '\0') {
