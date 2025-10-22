@@ -10,12 +10,94 @@
 #include "file_io.h"
 #include "vector.h"
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-vector* load(char* filename)
+/**
+ * @brief loads vectors from a file
+ * @param filename name of file to load from
+ * @param list pointer to vector list
+ * @return 0 if successful, 1 if error
+*/
+int load(char* filename, vector* list)
 {
-    return NULL;
+    // Checking for invalid input
+    if (filename == NULL || list == NULL) {
+        printf("Error: Invalid input\n");
+        return 1;
+    }
+
+    // Open file for reading
+    FILE *file_ptr = fopen(filename, "r");
+
+    // Check for error opening file
+    if (!file_ptr) {
+        printf("Error: Could not open file %s\n", filename);
+        return 1;
+    }
+
+    // Ignore header line
+    char buffer[256];
+    if (fgets(buffer, 256, file_ptr) == NULL) {
+        printf("Error: Could not read header form file %s\n", filename);
+        return 1;
+    }
+
+    // Count how many lines in file to allocate for memory
+    int size = 0;
+    char line[256];
+    while (fgets(line, 256, file_ptr) != NULL) {
+        if (line[0] != '\n' && line[0] != '\0') {
+            size = size + 1;
+        }
+    }
+    // Ignore header line
+    size = size - 1;
+
+    // Allocate memory for list
+    list = (vector*)malloc(size * sizeof(vector));
+    if (!list) {
+        printf("Error: Memory allocation failed\n");
+        return 1;
+    }
+
+
+    // Go back to the beginning of the file
+    rewind(file_ptr);
+
+    // Read each line of file and add vectors to list
+    int index = 0;
+    while (fgets(line, 256, file_ptr) != NULL) {
+        if (line[0] != '\n' && line[0] != '\0') {
+            char name[10];
+            float x;
+            float y;
+            float z;
+            if (sscanf(line, "%[^,], %f, %f, %f", name, &x, &y, &z) == 4) {
+                strcpy((list + index)->name, name);
+                (list + index)->x = x;
+                (list + index)->y = y;
+                (list + index)->z = z;
+            }
+            index = index + 1;
+        }
+    }
+
+    // Close file
+    fclose(file_ptr);
+
+    // Return success
+    return 0;
+
 }
 
+/**
+ * @brief saves vectors to a file
+ * @param filename name of file to save to
+ * @param list pointer to vector list
+ * @param size size of vector list
+ * @return 0 if successful, 1 if error
+*/
 int save(char* filename, vector* list, int size)
 {
     // Checking for invalid input
@@ -31,9 +113,6 @@ int save(char* filename, vector* list, int size)
         printf("Error: Could not open file %s\n", filename);
         return 1;
     }
-
-    // Write header line for .csv file
-    fprintf(file_ptr, "Name, X, Y, Z\n");
     
     // Write each vector in list to file
     for (int i = 0; i < size; i++) {
@@ -49,5 +128,7 @@ int save(char* filename, vector* list, int size)
 
     // Close file
     fclose(file_ptr);
+
+    // Return success
     return 0;
 }

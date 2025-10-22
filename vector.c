@@ -13,7 +13,30 @@
 #include <stdlib.h>
 
 // Allocates memory for vector list
-vector vector_list[10];
+vector* vector_list = NULL;
+
+/**
+ * @brief gets size of vector list
+ * @return size of vector list
+*/
+static int get_size()
+{
+    if (vector_list == NULL) {
+        return 0;
+    }
+    
+    // Count number of vectors in dynamic memory list
+    int size = 0;
+    // starts at index 0
+    int i = 0;
+    vector* current = vector_list;
+    // while not at the end of the list
+    while(*(current + i) != NULL) {
+        size = size + 1;
+        i = i + 1;
+    }
+    return size;
+}
 
 /**
  * @brief Computes addition of two vectors
@@ -28,6 +51,7 @@ vector add(vector a, vector b)
     result.y = a.y + b.y;
     result.z = a.z + b.z;
     return result;
+
 }
 
 /**
@@ -94,7 +118,7 @@ vector crossprod(vector a, vector b)
 */
 int addvect(vector new)
 {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < get_size(); i++) {
         if (strcmp(vector_list[i].name, new.name) == 0) {
             vector_list[i] = new;
             return 0;
@@ -134,7 +158,7 @@ int help()
 int clear()
 {
     // Iterates through array and sets all values to 0
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < get_size(); i++) {
         vector_list[i].name[0] = '\0';
         vector_list[i].x = 0;
         vector_list[i].y = 0;
@@ -151,7 +175,7 @@ int clear()
 int list()
 {
     // Iterates through array and prints all values
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < get_size(); i++) {
         printf("%d: ", i + 1);
         if (vector_list[i].name[0] != '\0') {
             printf("%s = %f %f %f", vector_list[i].name, 
@@ -172,7 +196,7 @@ vector findvect(char* name)
     // Iterates through array and returns vector if found
     // Returns empty vector if not found
     vector empty = {"", 0.0, 0.0, 0.0};
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < get_size(); i++) {
         if (strcmp(vector_list[i].name, name) == 0) {
             return vector_list[i];
         }
