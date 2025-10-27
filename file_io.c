@@ -32,7 +32,7 @@ int load(char* filename, VectorList* list)
 
     // Check for error opening file
     if (!file_ptr) {
-        printf("Error: Could not open file %s\n", filename);
+        printf("Error: File does not exist %s\n", filename);
         return 1;
     }
 
@@ -43,6 +43,13 @@ int load(char* filename, VectorList* list)
         if (line[0] != '\n' && line[0] != '\0') {
             size = size + 1;
         }
+    }
+
+    // Check if file has any data
+    if (size == 0) {
+        printf("Warning: File %s contains no valid vector data\n", filename);
+        fclose(file_ptr);
+        return 1;
     }
 
     // Free existing memory if any
@@ -67,21 +74,44 @@ int load(char* filename, VectorList* list)
 
     // Read each line of file and add vectors to list
     int index = 0;
+    int total_lines = 0;
+    int valid_lines = 0;
+    
     while (fgets(line, 256, file_ptr) != NULL) {
-        if (line[0] != '\n' && line[0] != '\0') {
-            char name[10];
-            float x;
-            float y;
-            float z;
-            if (sscanf(line, "%[^,], %f, %f, %f", name, &x, &y, &z) == 4) {
-                strcpy(list->data[index].name, name);
-                list->data[index].x = x;
-                list->data[index].y = y;
-                list->data[index].z = z;
-                list->count++;
-                index++;
-            }
+        // Skip empty lines
+        if (line[0] == '\n' || line[0] == '\0') {
+            continue;
         }
+        
+        total_lines++;
+        
+        char name[10];
+        float x, y, z;
+        int parsed = sscanf(line, "%[^,], %f, %f, %f", name, &x, &y, &z);
+        
+        // Check if line has exactly 4 values (name, x, y, z)
+        if (parsed == 4) {
+            strcpy(list->data[index].name, name);
+            list->data[index].x = x;
+            list->data[index].y = y;
+            list->data[index].z = z;
+            list->count++;
+            index++;
+            valid_lines++;
+        } else {
+            // Found incorrectly formatted line - abort loading
+            printf("Error: Incorrectly formatted CSV file\n");
+            printf("Expected format: name, x, y, z\n");
+            fclose(file_ptr);
+            return 1;
+        }
+    }
+    
+    // Check if file had any data lines
+    if (total_lines == 0) {
+        printf("Error: File contains no data\n");
+        fclose(file_ptr);
+        return 1;
     }
 
     // Close file

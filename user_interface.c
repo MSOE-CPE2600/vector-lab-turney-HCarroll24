@@ -140,6 +140,30 @@ int run_user_interface(VectorList* vector_list)
             continue;
         }
 
+        // Operation commands for saving and loading list
+        if (count == 2) {
+            if (strcmp(tokens[0], "save") == 0) {
+                char filename[16];
+                strcpy(filename, tokens[1]);
+                if (save(filename, vector_list->data, vector_list->count) == 0) {
+                    printf("Vector list saved to %s\n", filename);
+                    continue;
+                }
+                printf("Error: Failed to save vector list\n");
+                continue;
+            }
+            if (strcmp(tokens[0], "load") == 0) {
+                char filename[16];
+                strcpy(filename, tokens[1]);
+                if (load(filename, vector_list) == 0) {
+                    printf("Vector list loaded from %s\n", filename);
+                    continue;
+                }
+                printf("Error: Failed to load vector list from %s\n", filename);
+                continue;
+            }
+        }
+
         // Operation commands without assignment
         if (count == 3) {
             vector result;
