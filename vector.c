@@ -144,7 +144,7 @@ int addvect(VectorList* list, vector new)
 int help()
 {
     printf("Vector Operations Functions\n");
-    printf("Commands: quit, clear, list, help, save <filename>, load <filename>\n");
+    printf("Commands: quit, clear, list, help, save, load\n");
     printf("Operations: \n");
     printf("\tAdd: var1 + var2\n");
     printf("\tSub: var1 - var2\n");
@@ -153,8 +153,8 @@ int help()
     printf("\tCross Product: var1 x var2\n");
     printf("\tTo add a vector: varname = x y z\n");
     printf("\tTo find a vector: varname\n");
-    printf("\tTo save vectors: save filename.csv\n");
-    printf("\tTo load vectors: load filename.csv\n\n");
+    printf("\tTo save vectors: save filename.csv or save\n");
+    printf("\tTo load vectors: load filename.csv or load\n");
     printf("Reminders: \n");
     printf("\tInclude spaces inbetween values and operands\n");
     printf("\tVector storage is unlimited\n");

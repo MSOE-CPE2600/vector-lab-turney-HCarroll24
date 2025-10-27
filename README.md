@@ -23,6 +23,10 @@ type help when the program is running.
  * quit - exits the program
  * vectname - prints the vector to interface that was referenced
  * vectname = x y z - values replacing x y z are initialized for the vector
+ * load - prompts for a csv filename to load vector list from
+ * save - prompts for a csv filename to save vector list to
+ * load vectname - loads vector list from csv file
+ * save vectname - saves vector list to csv file
  * a is a vector, b is a vector, s is a scalar
     * a . b - computes and displays the dot product of a and b
     * a x b - computes and displays the cross product of a and b
