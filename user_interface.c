@@ -35,10 +35,10 @@ static int vector_not_found(vector v, char* name)
 
 /**
  * @brief Run the user interface module
- * @param list pointer to VectorList
+ * @param vector_list pointer to VectorList
  * @return 0 to exit
 */
-int run_user_interface(VectorList* list)
+int run_user_interface(VectorList* vector_list)
 {
     // Initialize variables
     char line[MAX_INPUT];
@@ -92,13 +92,13 @@ int run_user_interface(VectorList* list)
             }
             // check if clear command
             if (strcmp(tokens[0], "clear") == 0) {
-                clear(list);
+                clear(vector_list);
                 printf("Vector list cleared\n");
                 continue;
             }
             // check if list command
             if (strcmp(tokens[0], "list") == 0) {
-                list(list);
+                list(vector_list);
                 continue;
             }
             // check if save command
@@ -108,8 +108,8 @@ int run_user_interface(VectorList* list)
                     continue;
                 }
                 filename[strcspn(filename, "\n")] = '\0';
-                int size = get_size(list);
-                if (save(filename, list->data, size) == 0) {
+                int size = get_size(vector_list);
+                if (save(filename, vector_list->data, size) == 0) {
                     printf("Vector list saved to %s\n", filename);
                 } else {
                     printf("Error: Failed to save vector list\n");
@@ -123,7 +123,7 @@ int run_user_interface(VectorList* list)
                     continue;
                 }
                 filename[strcspn(filename, "\n")] = '\0';
-                if (load(filename, &list->data) == 0) {
+                if (load(filename, &vector_list->data) == 0) {
                     printf("Vector list loaded from %s\n", filename);
                 } else {
                     printf("Error: Failed to load vector list from %s\n", filename);
@@ -131,7 +131,7 @@ int run_user_interface(VectorList* list)
                 continue;
             }
             // else find vector
-            vector vect = findvect(list,list, tokens[0]);
+            vector vect = findvect(vector_list, tokens[0]);
             if (vect.name[0] == '\0') {
                 printf("Error: vector '%s' not found\n", tokens[0]);
                 continue;
@@ -145,13 +145,13 @@ int run_user_interface(VectorList* list)
             vector result;
             // check if add command
             if (strcmp(tokens[1], "+") == 0) {
-                vector v1 = findvect(list,tokens[0]); // find vector
+                vector v1 = findvect(vector_list, tokens[0]); // find vector
                 // Check if vector exists
                 vector_found1 = vector_not_found(v1, tokens[0]);
                 if (vector_found1 == 0) { // error message if not found
                     printf("ERROR: Vector '%s' not found\n", tokens[0]);
                 }
-                vector v2 = findvect(list,tokens[2]);
+                vector v2 = findvect(vector_list, tokens[2]);
                 vector_found2 = vector_not_found(v2, tokens[2]);
                 if (vector_found2 == 0) { // check if vectors are found
                     printf("ERROR: Vector '%s' not found\n", tokens[2]);
@@ -163,12 +163,12 @@ int run_user_interface(VectorList* list)
                 printf("ans = %.2f %.2f %.2f\n", result.x, 
                     result.y, result.z);
             } else if (strcmp(tokens[1], "-") == 0) {
-                vector v1 = findvect(list,tokens[0]);
+                vector v1 = findvect(vector_list, tokens[0]);
                 vector_found1 = vector_not_found(v1, tokens[0]);
                 if (vector_found1 == 0) {
                     printf("ERROR: Vector '%s' not found\n", tokens[0]);
                 }
-                vector v2 = findvect(list,tokens[2]);
+                vector v2 = findvect(vector_list, tokens[2]);
                 vector_found2 = vector_not_found(v2, tokens[2]);
                 if (vector_found2 == 0) { // check if vectors are found
                     printf("ERROR: Vector '%s' not found\n", tokens[2]);
@@ -181,13 +181,13 @@ int run_user_interface(VectorList* list)
                 printf("ans = %.2f %.2f %.2f\n", result.x, 
                     result.y, result.z);
             } else if (strcmp(tokens[1], ".") == 0) {
-                vector v1 = findvect(list,tokens[0]);
+                vector v1 = findvect(vector_list, tokens[0]);
                 // check if vector exists
                 vector_found1 = vector_not_found(v1, tokens[0]);
                 if (vector_found1 == 0) {
                     printf("ERROR: Vector '%s' not found\n", tokens[0]);
                 }
-                vector v2 = findvect(list,tokens[2]);
+                vector v2 = findvect(vector_list, tokens[2]);
                 // check if vector exists
                 vector_found2 = vector_not_found(v2, tokens[2]);
                 if (vector_found2 == 0) { // error message if not found
@@ -200,13 +200,13 @@ int run_user_interface(VectorList* list)
                 // print result as scalar not as vector
                 printf("ans = %.2f\n", dp);
             } else if (strcmp(tokens[1], "x") == 0) {
-                vector v1 = findvect(list,tokens[0]);
+                vector v1 = findvect(vector_list, tokens[0]);
                 // check if vector exists
                 vector_found1 = vector_not_found(v1, tokens[0]);
                 if (vector_found1 == 0) { // error message if not found
                     printf("ERROR: Vector '%s' not found\n", tokens[0]);
                 }
-                vector v2 = findvect(list,tokens[2]);
+                vector v2 = findvect(vector_list, tokens[2]);
                 // check if vector exists
                 vector_found2 = vector_not_found(v2, tokens[2]);   
                 if (vector_found2 == 0) {
@@ -220,8 +220,8 @@ int run_user_interface(VectorList* list)
                 printf("ans = %.2f %.2f %.2f\n", result.x, 
                     result.y, result.z); // print result as vector
             } else if (strcmp(tokens[1], "*") == 0){ // scalar multiplication
-                vector v1 = findvect(list,tokens[0]);
-                vector v2 = findvect(list,tokens[2]);
+                vector v1 = findvect(vector_list, tokens[0]);
+                vector v2 = findvect(vector_list, tokens[2]);
                 // check if vectors exist
                 vector_found1 = vector_not_found(v1, tokens[0]);
                 vector_found2 = vector_not_found(v2, tokens[2]);
@@ -251,13 +251,13 @@ int run_user_interface(VectorList* list)
         if (count == 5) {
             vector resultassign;
             if (strcmp(tokens[3], "+") == 0) {
-                vector v1 = findvect(list,tokens[2]);
+                vector v1 = findvect(vector_list, tokens[2]);
                 if (vector_found1 == 0) {
                     printf("ERROR: Vector '%s' not found\n", tokens[2]);
                 }
                 // check if vector exists
                 vector_found1 = vector_not_found(v1, tokens[2]);
-                vector v2 = findvect(list,tokens[4]);
+                vector v2 = findvect(vector_list, tokens[4]);
                 // check if vector exists
                 vector_found2 = vector_not_found(v2, tokens[4]);
                 if (vector_found2 == 0) { // error message if not found
@@ -269,7 +269,7 @@ int run_user_interface(VectorList* list)
                 }
                 resultassign = add(v1, v2); // add vectors
                 strcpy(resultassign.name, tokens[0]);
-                if (addvect(list,resultassign) != 0) { // check storage
+                if (addvect(vector_list, resultassign) != 0) { // check storage
                     printf("Error: failed to add vector\n");
                     continue;
                 }
@@ -277,13 +277,13 @@ int run_user_interface(VectorList* list)
                 printf("%s = %.2f %.2f %.2f\n", resultassign.name, 
                     resultassign.x, resultassign.y, resultassign.z);
             } else if (strcmp(tokens[3], "-") == 0) {
-                vector v1 = findvect(list,tokens[2]);
+                vector v1 = findvect(vector_list, tokens[2]);
                 // check if vector exists
                 vector_found1 = vector_not_found(v1, tokens[2]);
                 if (vector_found1 == 0) { // error message if not found
                     printf("ERROR: Vector '%s' not found\n", tokens[2]);
                 }
-                vector v2 = findvect(list,tokens[4]);
+                vector v2 = findvect(vector_list, tokens[4]);
                 // check if vector exists
                 vector_found2 = vector_not_found(v2, tokens[4]);
                 if (vector_found2 == 0) { // error message if not found
@@ -295,7 +295,7 @@ int run_user_interface(VectorList* list)
                 }
                 resultassign = sub(v1, v2); // subtract vectors
                 strcpy(resultassign.name, tokens[0]);
-                if (addvect(list,resultassign) != 0) { // check storage
+                if (addvect(vector_list, resultassign) != 0) { // check storage
                     printf("Error: failed to add vector\n");
                     continue;
                 }
@@ -303,8 +303,8 @@ int run_user_interface(VectorList* list)
                 printf("%s = %.2f %.2f %.2f\n", resultassign.name, 
                     resultassign.x, resultassign.y, resultassign.z);
             } else if (strcmp(tokens[3], "*") == 0) {
-                vector v1 = findvect(list,tokens[2]);
-                vector v2 = findvect(list,tokens[4]);
+                vector v1 = findvect(vector_list, tokens[2]);
+                vector v2 = findvect(vector_list, tokens[4]);
                 // check if vectors exist
                 vector_found1 = vector_not_found(v1, tokens[0]);
                 vector_found2 = vector_not_found(v2, tokens[2]);
@@ -328,20 +328,20 @@ int run_user_interface(VectorList* list)
                 }
                 // print result as vector after assignment
                 strcpy(resultassign.name, tokens[0]);
-                if (addvect(list,resultassign) != 0) {
+                if (addvect(vector_list, resultassign) != 0) {
                     printf("Error: failed to add vector\n");
                     continue;
                 }
                 printf("%s = %.2f %.2f %.2f\n", resultassign.name, 
                     resultassign.x, resultassign.y, resultassign.z);
             } else if (strcmp(tokens[3], "x") == 0) {
-                vector v1 = findvect(list,tokens[2]);
+                vector v1 = findvect(vector_list, tokens[2]);
                 // check if vector exists
                 vector_found1 = vector_not_found(v1, tokens[2]);
                 if (vector_found1 == 0) { // error message if not found
                     printf("ERROR: Vector '%s' not found\n", tokens[2]);
                 }
-                vector v2 = findvect(list,tokens[4]);
+                vector v2 = findvect(vector_list, tokens[4]);
                 // check if vector exists
                 vector_found2 = vector_not_found(v2, tokens[4]);
                 if (vector_found2 == 0) { // error message if not found
@@ -353,7 +353,7 @@ int run_user_interface(VectorList* list)
                 // assign result
                 resultassign = crossprod(v1, v2); // cross product
                 strcpy(resultassign.name, tokens[0]);
-                if (addvect(list,resultassign) != 0) { // check full storage
+                if (addvect(vector_list, resultassign) != 0) { // check full storage
                     printf("Error: failed to add vector\n");
                     continue;
                 }
@@ -370,7 +370,7 @@ int run_user_interface(VectorList* list)
                 resultassign.x = atof(tokens[2]); // assign x
                 resultassign.y = atof(tokens[3]); // assign y
                 resultassign.z = atof(tokens[4]); // assign z 
-                if (addvect(list,resultassign) != 0) { // check if storage is full
+                if (addvect(vector_list, resultassign) != 0) { // check if storage is full
                     printf("Error: failed to add vector\n");
                     continue;
                 }

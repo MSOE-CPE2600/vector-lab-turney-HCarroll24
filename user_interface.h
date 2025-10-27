@@ -15,10 +15,10 @@
 /**
  * @brief Run the user interface module: contains all function for
  * user interaction with the vector calculator
- * @param list pointer to VectorList
+ * @param vector_list pointer to VectorList
  * @return 0 to exit
 */
-int run_user_interface(VectorList* list);
+int run_user_interface(VectorList* vector_list);
 
 /* internal helpers are defined static in user_interface.c */
 

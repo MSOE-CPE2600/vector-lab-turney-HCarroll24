@@ -226,4 +226,3 @@ int free_memory(VectorList* list)
     }
     return 0;
 }
-}
