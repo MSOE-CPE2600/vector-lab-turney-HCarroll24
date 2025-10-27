@@ -19,6 +19,8 @@
  * - If vector command, display vector
  * - If operation command, display result of operation
  * - If assignment command, assign result to vector
+ * - if save command, save vector list to file
+ * - if load command, load vector list from file
  * 
  * Compile: make
  * Run: ./vector
