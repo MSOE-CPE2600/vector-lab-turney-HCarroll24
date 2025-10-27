@@ -33,4 +33,11 @@ type help when the program is running.
     * Note: by using vectname = to any of the operations, assigns result as vector
 
 ## Dynamic Memory Use
-Do later
+For my first time allocation, I use a malloc to get the memory when adding my
+first vector in the program. When I want to grow the array. I use malloc when
+I run out of space to get more memory. I decided to realloc every time you add
+a new vector to keep the vector list as small as possible. Added overall 
+complexity. When loading form a file I use malloc to create a list for the correct
+amount of vectors. I use a free_memory() function to clean up all the memory and
+make sure that it is all freed. Does the freeing for me because I have so many
+functions that modify memory.
