@@ -25,16 +25,30 @@
 ********************************************************************/
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "user_interface.h"
 #include "vector.h"
 #include "file_io.h"
 
+/**
+ * @brief Main function for the vector calculator/mini matlab
+ * @param argc number of arguments
+ * @param argv arguments
+ * @return 0 to exit
+*/
 int main(int argc, char *argv[])
 {
+    // Initialize VectorList
+    VectorList list = {NULL, 0, 0};
+    
     if (argc == 2 && strcmp(argv[1], "-h") == 0) {
         help();
     }
     
-    run_user_interface();
+    run_user_interface(&list);
+    
+    // Free memory before exiting
+    free_memory(&list);
+    
     return 0;
 }

@@ -16,10 +16,10 @@
 /**
  * @brief loads vectors from a file
  * @param filename name of file to load from
- * @param list pointer to vector list
+ * @param list pointer to vector list (will be updated)
  * @return 0 if successful, 1 if error
 */
-int load(char* filename, vector* list)
+int load(char* filename, vector** list)
 {
     // Checking for invalid input
     if (filename == NULL || list == NULL) {
@@ -54,9 +54,14 @@ int load(char* filename, vector* list)
     // Ignore header line
     size = size - 1;
 
+    // Free existing memory if any
+    if (*list != NULL) {
+        free(*list);
+    }
+    
     // Allocate memory for list
-    list = (vector*)malloc(size * sizeof(vector));
-    if (!list) {
+    *list = (vector*)malloc(size * sizeof(vector));
+    if (!*list) {
         printf("Error: Memory allocation failed\n");
         return 1;
     }
@@ -74,10 +79,10 @@ int load(char* filename, vector* list)
             float y;
             float z;
             if (sscanf(line, "%[^,], %f, %f, %f", name, &x, &y, &z) == 4) {
-                strcpy((list + index)->name, name);
-                (list + index)->x = x;
-                (list + index)->y = y;
-                (list + index)->z = z;
+                strcpy((*list + index)->name, name);
+                (*list + index)->x = x;
+                (*list + index)->y = y;
+                (*list + index)->z = z;
             }
             index = index + 1;
         }

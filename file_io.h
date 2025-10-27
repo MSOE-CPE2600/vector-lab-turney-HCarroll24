@@ -15,9 +15,10 @@
 /**
  * @brief loads vectors from a file
  * @param filename name of file to load from
+ * @param list pointer to vector list (will be updated)
  * @return 0 if successful, 1 if error
 */
-int load(char* filename, vector* list);
+int load(char* filename, vector** list);
 
 /**
  * @brief saves vectors to a file

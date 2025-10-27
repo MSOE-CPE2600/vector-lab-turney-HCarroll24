@@ -10,13 +10,15 @@
 #ifndef USER_INTERFACE_H
 #define USER_INTERFACE_H
 
+#include "vector.h"
+
 /**
  * @brief Run the user interface module: contains all function for
  * user interaction with the vector calculator
- * @param store pointer to vector store
+ * @param list pointer to VectorList
  * @return 0 to exit
 */
-int run_user_interface();
+int run_user_interface(VectorList* list);
 
 /* internal helpers are defined static in user_interface.c */
 

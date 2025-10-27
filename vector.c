@@ -12,30 +12,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Allocates memory for vector list
-vector* vector_list = NULL;
-
 /**
  * @brief gets size of vector list
+ * @param list pointer to VectorList
  * @return size of vector list
 */
-static int get_size()
+int get_size(VectorList* list)
 {
-    if (vector_list == NULL) {
-        return 0;
-    }
-    
-    // Count number of vectors in dynamic memory list
-    int size = 0;
-    // starts at index 0
-    int i = 0;
-    vector* current = vector_list;
-    // while not at the end of the list
-    while(*(current + i) != NULL) {
-        size = size + 1;
-        i = i + 1;
-    }
-    return size;
+    return list->count;
 }
 
 /**
@@ -113,22 +97,44 @@ vector crossprod(vector a, vector b)
 /**
  * @brief Adds new vector to storage array. If same name exists, replace
  * otherwise add to empty location. If full do nothing and return error
+ * @param list pointer to VectorList
  * @param new Vector to add
  * @return 0 if successful, 1 if full
 */
-int addvect(vector new)
+int addvect(VectorList* list, vector new)
 {
-    for (int i = 0; i < get_size(); i++) {
-        if (strcmp(vector_list[i].name, new.name) == 0) {
-            realloc(vector_list, (get_size() + 1) * sizeof(vector));
-            vector_list[i] = new;
-            return 0;
-        } else if (vector_list[i].name[0] == '\0') {
-            vector_list[i] = new;
+    // Check if vector with same name already exists
+    for (int i = 0; i < list->count; i++) {
+        if (strcmp(list->data[i].name, new.name) == 0) {
+            list->data[i] = new;
             return 0;
         }
     }
-    return 1;
+    
+    // Check if we need to allocate or reallocate memory
+    if (list->data == NULL) {
+        // First allocation
+        list->data = (vector*)malloc(sizeof(vector));
+        if (!list->data) {
+            printf("Error: Memory allocation failed\n");
+            return 1;
+        }
+        list->capacity = 1;
+    } else if (list->count >= list->capacity) {
+        // Need to grow the array
+        list->capacity *= 2;  // Double the capacity
+        vector* temp = (vector*)realloc(list->data, list->capacity * sizeof(vector));
+        if (!temp) {
+            printf("Error: Memory reallocation failed\n");
+            return 1;
+        }
+        list->data = temp;
+    }
+    
+    // Add the new vector
+    list->data[list->count] = new;
+    list->count++;
+    return 0;
 }
 
 /**
@@ -138,7 +144,7 @@ int addvect(vector new)
 int help()
 {
     printf("Vector Operations Functions\n");
-    printf("Commands: quit, clear, list, help\n");
+    printf("Commands: quit, clear, list, help, save, load\n");
     printf("Operations: \n");
     printf("\tAdd: var1 + var2\n");
     printf("\tSub: var1 - var2\n");
@@ -146,41 +152,40 @@ int help()
     printf("\tDot Product: var1 . var2\n");
     printf("\tCross Product: var1 x var2\n");
     printf("\tTo add a vector: varname = x y z\n");
-    printf("\tTo find a vector: varname\n\n");
+    printf("\tTo find a vector: varname\n");
+    printf("\tTo save vectors: save\n");
+    printf("\tTo load vectors: load\n\n");
     printf("Reminders: \n");
     printf("\tInclude spaces inbetween values and operands\n");
+    printf("\tVector storage is unlimited\n");
     return 0;
 }
 
 /**
  * @brief Clear storage array
+ * @param list pointer to VectorList
  * @return 0 to exit
 */
-int clear()
+int clear(VectorList* list)
 {
-    // Iterates through array and sets all values to 0
-    for (int i = 0; i < get_size(); i++) {
-        vector_list[i].name[0] = '\0';
-        vector_list[i].x = 0;
-        vector_list[i].y = 0;
-        vector_list[i].z = 0;
-    }
-
+    // Reset count to 0 (don't free memory, just mark as empty)
+    list->count = 0;
     return 0;
 }
 
 /**
  * @brief Display list of all vectors
+ * @param list pointer to VectorList
  * @return 0 to exit
 */
-int list()
+int list(VectorList* list)
 {
     // Iterates through array and prints all values
-    for (int i = 0; i < get_size(); i++) {
+    for (int i = 0; i < list->count; i++) {
         printf("%d: ", i + 1);
-        if (vector_list[i].name[0] != '\0') {
-            printf("%s = %f %f %f", vector_list[i].name, 
-                vector_list[i].x, vector_list[i].y, vector_list[i].z);
+        if (list->data[i].name[0] != '\0') {
+            printf("%s = %f %f %f", list->data[i].name, 
+                list->data[i].x, list->data[i].y, list->data[i].z);
         }
         printf("\n");
     }
@@ -189,23 +194,36 @@ int list()
 
 /**
  * @brief Search array for name vector and return a copy to caller
+ * @param list pointer to VectorList
  * @param name name of vector to find
  * @return copy of vector if found, NULL if not
 */
-vector findvect(char* name)
+vector findvect(VectorList* list, char* name)
 {
     // Iterates through array and returns vector if found
     // Returns empty vector if not found
     vector empty = {"", 0.0, 0.0, 0.0};
-    for (int i = 0; i < get_size(); i++) {
-        if (strcmp(vector_list[i].name, name) == 0) {
-            return vector_list[i];
+    for (int i = 0; i < list->count; i++) {
+        if (strcmp(list->data[i].name, name) == 0) {
+            return list->data[i];
         }
     }
     return empty;
 }
 
-vector* get_vector_list()
+/**
+ * @brief Free memory function to free all allocated memory
+ * @param list pointer to VectorList
+ * @return 0 on success
+*/
+int free_memory(VectorList* list)
 {
-    return vector_list;
+    if (list->data != NULL) {
+        free(list->data);
+        list->data = NULL;
+        list->count = 0;
+        list->capacity = 0;
+    }
+    return 0;
+}
 }

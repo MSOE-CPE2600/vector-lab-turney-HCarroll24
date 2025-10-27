@@ -17,6 +17,12 @@ typedef struct {
     float z;
 } vector;
 
+typedef struct {
+    vector* data;
+    int count;
+    int capacity;
+} VectorList;
+
 /**
  * @brief Computes addition of two vectors
  * @param a first vector
@@ -59,23 +65,26 @@ vector crossprod(vector a, vector b);
 /**
  * @brief Adds new vector to storage array. If same name exists, replace
  * otherwise add to empty location. If full do nothing and return error
+ * @param list pointer to VectorList
  * @param new Vector to add
  * @return 0 if successful, 1 if full
 */
-int addvect(vector new);
+int addvect(VectorList* list, vector new);
 
 /**
  * @brief Search array for name vector and return a copy to caller
+ * @param list pointer to VectorList
  * @param name name of vector to find
  * @return copy of vector if found, NULL if not
 */
-vector findvect(char* name);
+vector findvect(VectorList* list, char* name);
 
 /**
  * @brief Clear storage array
+ * @param list pointer to VectorList
  * @return 0 to exit
 */
-int clear();
+int clear(VectorList* list);
 
 /**
  * @brief Display help message to user for summary of uses
@@ -85,14 +94,23 @@ int help();
 
 /**
  * @brief Display list of all vectors
+ * @param list pointer to VectorList
  * @return 0 to exit
 */
-int list();
+int list(VectorList* list);
 
 /**
- * @brief get the vector list to avoid global
- * @return pointer to vector list
+ * @brief get the size of the vector list
+ * @param list pointer to VectorList
+ * @return size of vector list
 */
-vector* get_vector_list();
+int get_size(VectorList* list);
+
+/**
+ * @brief Free memory function to free all allocated memory
+ * @param list pointer to VectorList
+ * @return 0 on success
+*/
+int free_memory(VectorList* list);
 
 #endif
