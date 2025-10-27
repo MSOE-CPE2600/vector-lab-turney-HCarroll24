@@ -123,7 +123,7 @@ int run_user_interface(VectorList* vector_list)
                     continue;
                 }
                 filename[strcspn(filename, "\n")] = '\0';
-                if (load(filename, &vector_list->data) == 0) {
+                if (load(filename, vector_list) == 0) {
                     printf("Vector list loaded from %s\n", filename);
                 } else {
                     printf("Error: Failed to load vector list from %s\n", filename);

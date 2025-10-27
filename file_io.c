@@ -16,10 +16,10 @@
 /**
  * @brief loads vectors from a file
  * @param filename name of file to load from
- * @param list pointer to vector list (will be updated)
+ * @param list pointer to VectorList (will be updated)
  * @return 0 if successful, 1 if error
 */
-int load(char* filename, vector** list)
+int load(char* filename, VectorList* list)
 {
     // Checking for invalid input
     if (filename == NULL || list == NULL) {
@@ -36,14 +36,7 @@ int load(char* filename, vector** list)
         return 1;
     }
 
-    // Ignore header line
-    char buffer[256];
-    if (fgets(buffer, 256, file_ptr) == NULL) {
-        printf("Error: Could not read header form file %s\n", filename);
-        return 1;
-    }
-
-    // Count how many lines in file to allocate for memory
+    // Count how many data lines in file
     int size = 0;
     char line[256];
     while (fgets(line, 256, file_ptr) != NULL) {
@@ -51,21 +44,23 @@ int load(char* filename, vector** list)
             size = size + 1;
         }
     }
-    // Ignore header line
-    size = size - 1;
 
     // Free existing memory if any
-    if (*list != NULL) {
-        free(*list);
+    if (list->data != NULL) {
+        free(list->data);
     }
     
     // Allocate memory for list
-    *list = (vector*)malloc(size * sizeof(vector));
-    if (!*list) {
+    list->data = (vector*)malloc(size * sizeof(vector));
+    if (!list->data) {
         printf("Error: Memory allocation failed\n");
+        fclose(file_ptr);
         return 1;
     }
-
+    
+    // Set capacity and reset count
+    list->capacity = size;
+    list->count = 0;
 
     // Go back to the beginning of the file
     rewind(file_ptr);
@@ -79,12 +74,13 @@ int load(char* filename, vector** list)
             float y;
             float z;
             if (sscanf(line, "%[^,], %f, %f, %f", name, &x, &y, &z) == 4) {
-                strcpy((*list + index)->name, name);
-                (*list + index)->x = x;
-                (*list + index)->y = y;
-                (*list + index)->z = z;
+                strcpy(list->data[index].name, name);
+                list->data[index].x = x;
+                list->data[index].y = y;
+                list->data[index].z = z;
+                list->count++;
+                index++;
             }
-            index = index + 1;
         }
     }
 
@@ -93,7 +89,6 @@ int load(char* filename, vector** list)
 
     // Return success
     return 0;
-
 }
 
 /**
